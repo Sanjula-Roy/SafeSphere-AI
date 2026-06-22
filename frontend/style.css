@@ -1,0 +1,149 @@
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0f172a;
+    color: white;
+}
+
+.container {
+    width: 80%;
+    max-width: 900px;
+    margin: 60px auto;
+    background: #111827;
+    padding: 30px;
+    border-radius: 18px;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.subtitle {
+    text-align: center;
+    color: #cbd5e1;
+}
+
+textarea {
+    width: 100%;
+    height: 140px;
+    margin-top: 25px;
+    padding: 15px;
+    border-radius: 12px;
+    border: none;
+    resize: none;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 15px;
+    width: 100%;
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 17px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+#result {
+    margin-top: 25px;
+    background: #020617;
+    padding: 20px;
+    border-radius: 12px;
+    white-space: pre-wrap;
+}
+.card {
+
+    background: #111827;
+
+    margin-top: 20px;
+
+    padding: 20px;
+
+    border-radius: 15px;
+
+    border: 1px solid #334155;
+}
+
+.card h2 {
+
+    margin-top: 0;
+
+    color: white;
+}
+
+.card p {
+
+    color: #cbd5e1;
+}
+
+.card ul {
+
+    color: #cbd5e1;
+}
+
+.risk {
+
+    width: fit-content;
+
+    padding: 10px 20px;
+
+    border-radius: 12px;
+
+    font-weight: bold;
+
+    color: white;
+
+    font-size: 18px;
+}
+.help-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.help-grid button {
+    background: #1e293b;
+    border: 1px solid #334155;
+    min-height: 80px;
+    font-size: 16px;
+}
+
+.questions-box {
+    margin-top: 25px;
+    background: #020617;
+    padding: 20px;
+    border-radius: 14px;
+    border: 1px solid #334155;
+}
+
+.questions-box h3 {
+    margin-top: 0;
+}
+
+.questions-box label {
+    display: block;
+    margin-top: 12px;
+    margin-bottom: 5px;
+    color: #cbd5e1;
+}
+
+.questions-box input,
+.questions-box select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+    margin-bottom: 10px;
+}
+
+.analyze-btn {
+    background: #2563eb;
+}

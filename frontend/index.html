@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SafeSphere AI</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="container">
+    <h1>🛡️ SafeSphere AI</h1>
+    <p class="subtitle">AI Safety Response Platform</p>
+
+    <h2>Select Help Type</h2>
+
+    <div class="help-grid">
+        <button onclick="selectHelp('scam')">🚨 Scam / Fraud</button>
+        <button onclick="selectHelp('women')">👩 Women Safety</button>
+        <button onclick="selectHelp('medical')">🏥 Medical</button>
+        <button onclick="selectHelp('disaster')">🌊 Disaster</button>
+        <button onclick="selectHelp('privacy')">🔒 Privacy Leak</button>
+        <button onclick="selectHelp('sos')">🆘 SOS Message</button>
+    </div>
+
+    <div id="questionsBox" class="questions-box">
+        <p>Select a help type above to get guided questions.</p>
+    </div>
+
+    <textarea 
+        id="userInput" 
+        placeholder="Your guided situation will appear here. You can also type extra details..."
+    ></textarea>
+
+    <button class="analyze-btn" onclick="analyzeSafety()">Analyze Safety</button>
+
+    <div id="result"></div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
