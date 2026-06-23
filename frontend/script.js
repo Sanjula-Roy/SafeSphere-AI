@@ -104,6 +104,39 @@ function selectHelp(type) {
     input.value = prompt;
 }
 
+function startVoiceInput() {
+    const input = document.getElementById("userInput");
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+        alert("Voice input is not supported in this browser. Please use Chrome.");
+        return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = "en-IN";
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.start();
+
+    recognition.onstart = function () {
+        input.placeholder = "Listening...";
+    };
+
+    recognition.onresult = function (event) {
+        const speechText = event.results[0][0].transcript;
+        input.value = input.value + " " + speechText;
+        input.placeholder = "Your guided situation will appear here. You can also type extra details...";
+    };
+
+    recognition.onerror = function () {
+        alert("Voice input failed. Please try again.");
+        input.placeholder = "Your guided situation will appear here. You can also type extra details...";
+    };
+}
+
 function buildPrompt(type) {
     const input = document.getElementById("userInput");
 
@@ -337,6 +370,73 @@ function renderCrisis(crisis, plan) {
 
     return html;
 }
+function renderEmotionalSupport(support) {
+    return `
+        <div class="card emotional-card">
+            <h2>💙 Emotional Support Available</h2>
+            <p><strong>${safeText(support.opening_message)}</strong></p>
+            <p>${safeText(support.empathetic_response)}</p>
+            <p>${safeText(support.follow_up_question)}</p>
+
+            <button class="chat-btn" onclick="openEmotionalChat()">
+                Talk to SafeSphere
+            </button>
+            <button class="not-now-btn" onclick="closeEmotionalChat()">
+                Not Now
+            </button>
+        </div>
+
+        <div id="emotionalChatBox" class="chat-box" style="display:none;">
+            <h3>💙 SafeSphere Companion</h3>
+            <div id="chatMessages" class="chat-messages">
+                <div class="bot-msg">${safeText(support.opening_message)}</div>
+                <div class="bot-msg">${safeText(support.follow_up_question)}</div>
+            </div>
+
+            <div class="chat-input-row">
+                <input id="chatInput" placeholder="Type what you're feeling...">
+                <button onclick="sendEmotionalMessage()">Send</button>
+            </div>
+        </div>
+    `;
+}
+
+function openEmotionalChat() {
+    document.getElementById("emotionalChatBox").style.display = "block";
+}
+
+function closeEmotionalChat() {
+    document.getElementById("emotionalChatBox").style.display = "none";
+}
+
+async function sendEmotionalMessage() {
+    const input = document.getElementById("chatInput");
+    const messages = document.getElementById("chatMessages");
+
+    const userText = input.value.trim();
+    if (!userText) return;
+
+    messages.innerHTML += `<div class="user-msg">${userText}</div>`;
+    input.value = "";
+
+    messages.innerHTML += `<div class="bot-msg">Typing...</div>`;
+
+    try {
+        const response = await fetch("http://127.0.0.1:5000/emotional-chat", {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({message: userText})
+        });
+
+        const data = await response.json();
+
+        const typingMsg = messages.querySelector(".bot-msg:last-child");
+        typingMsg.innerText = data.reply || "I'm here with you. Tell me more.";
+    } catch (error) {
+        const typingMsg = messages.querySelector(".bot-msg:last-child");
+        typingMsg.innerText = "I'm here with you. You can tell me more.";
+    }
+}
 async function analyzeSafety() {
     const input = document.getElementById("userInput").value;
     const resultDiv = document.getElementById("result");
@@ -360,6 +460,9 @@ async function analyzeSafety() {
 
         const final = data.final_response || {};
         let html = "";
+        if (final.emotional_support) {
+        html += renderEmotionalSupport(final.emotional_support);
+        }
 
         if (final.threat_analysis) {
             html += renderThreat(final.threat_analysis);

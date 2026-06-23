@@ -147,3 +147,84 @@ button:hover {
 .analyze-btn {
     background: #2563eb;
 }
+.input-row {
+    display: flex;
+    gap: 12px;
+    align-items: stretch;
+}
+
+.input-row textarea {
+    flex: 1;
+}
+
+.mic-btn {
+    width: 70px;
+    margin-top: 25px;
+    font-size: 24px;
+    background: #7c3aed;
+}
+
+.mic-btn:hover {
+    background: #6d28d9;
+}
+.emotional-card {
+    border: 1px solid #7c3aed;
+    background: #111827;
+}
+
+.chat-btn {
+    background: #7c3aed;
+    margin-top: 15px;
+}
+
+.not-now-btn {
+    background: #374151;
+    margin-top: 10px;
+}
+
+.chat-box {
+    background: #020617;
+    border: 1px solid #7c3aed;
+    border-radius: 15px;
+    padding: 20px;
+    margin-top: 20px;
+}
+
+.chat-messages {
+    max-height: 250px;
+    overflow-y: auto;
+    margin-bottom: 15px;
+}
+
+.bot-msg {
+    background: #1e293b;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    color: white;
+}
+
+.user-msg {
+    background: #2563eb;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    color: white;
+    text-align: right;
+}
+
+.chat-input-row {
+    display: flex;
+    gap: 10px;
+}
+
+.chat-input-row input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: none;
+}
+
+.chat-input-row button {
+    width: 120px;
+}

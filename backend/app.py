@@ -7,6 +7,7 @@ from agents.safety_agent import assess_personal_safety
 from agents.crisis_agent import assess_crisis
 from agents.planning_agent import generate_action_plan
 from agents.coordinator_agent import coordinate_safety_request
+from agents.emotional_support_agent import emotional_support_chat
 
 app = Flask(__name__)
 CORS(app)
@@ -89,6 +90,16 @@ def safe_sphere_route():
         return jsonify({"error": "Input is required"}), 400
 
     return jsonify(coordinate_safety_request(user_input))
+
+@app.route("/emotional-chat", methods=["POST"])
+def emotional_chat_route():
+    data = request.get_json()
+    message = data.get("message", "")
+
+    if not message:
+        return jsonify({"error": "Message is required"}), 400
+
+    return jsonify(emotional_support_chat(message))
 
 if __name__ == "__main__":
     app.run(debug=True)

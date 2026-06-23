@@ -4,6 +4,7 @@ from agents.safety_agent import assess_personal_safety
 from agents.crisis_agent import assess_crisis
 from agents.planning_agent import generate_action_plan
 from agents.explanation_agent import generate_explanation
+from agents.emotional_support_agent import detect_emotional_distress, emotional_support_response
 
 
 def coordinate_safety_request(user_input):
@@ -15,6 +16,25 @@ def coordinate_safety_request(user_input):
         "selected_agents": [],
         "final_response": {}
     }
+    SAFETY_CONTEXT_KEYWORDS = [
+    "sos", "emergency", "help me", "flood", "fire", "earthquake",
+    "storm", "disaster", "medical", "ambulance", "accident",
+    "unsafe", "following", "harassing", "stalking", "cab",
+    "driver", "knife", "weapon", "scam", "fraud", "otp",
+    "bank", "kyc", "privacy", "aadhaar", "pan", "private", "kill", "harm", "touch", "abuse"
+]
+
+    is_safety_context = any(word in text for word in SAFETY_CONTEXT_KEYWORDS)
+
+    emotional_check = None
+
+    if not is_safety_context:
+     emotional_check = detect_emotional_distress(user_input)
+
+    if emotional_check and emotional_check.get("is_emotional_distress") is True:
+        results["selected_agents"].append("Emotional Support Agent")
+        results["final_response"]["emotional_detection"] = emotional_check
+        results["final_response"]["emotional_support"] = emotional_support_response(user_input)
 
     if any(word in text for word in ["otp", "bank", "click", "kyc", "password", "upi", "blocked", "verify"]):
         results["selected_agents"].append("Threat Detection Agent")

@@ -25,10 +25,14 @@
         <p>Select a help type above to get guided questions.</p>
     </div>
 
+    <div class="input-row">
     <textarea 
         id="userInput" 
         placeholder="Your guided situation will appear here. You can also type extra details..."
     ></textarea>
+
+    <button class="mic-btn" onclick="startVoiceInput()">🎙️</button>
+    </div>
 
     <button class="analyze-btn" onclick="analyzeSafety()">Analyze Safety</button>
 
