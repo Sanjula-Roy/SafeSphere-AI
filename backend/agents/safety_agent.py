@@ -1,4 +1,5 @@
 from utils.groq_helper import analyze_with_groq
+from mcp_server.server import call_mcp_tool
 
 
 def assess_personal_safety(situation):
@@ -13,6 +14,12 @@ def assess_personal_safety(situation):
     if groq_result and "error" not in groq_result:
         groq_result["agent"] = "Personal Safety Agent"
         groq_result["analysis_source"] = "Groq LLM + Safety Agent"
+
+        groq_result["emergency_contacts"] = call_mcp_tool(
+            "get_emergency_contacts",
+            category="women"
+        )
+        groq_result["mcp_tool_used"] = "get_emergency_contacts"
 
         risk_level = groq_result.get("risk_level", "Low")
 
@@ -144,12 +151,11 @@ def rule_based_personal_safety(situation):
         "next_5_minutes": get_actions(risk_level),
         "next_30_minutes": get_follow_up_actions(risk_level),
         "custom_sos_message": generate_sos_message(risk_level),
-        "emergency_contacts": [
-            "112 - National Emergency Helpline",
-            "100 - Police",
-            "1091 - Women Helpline",
-            "181 - Women Helpline"
-        ],
+        "emergency_contacts": call_mcp_tool(
+            "get_emergency_contacts",
+            category="women"
+        ),
+        "mcp_tool_used": "get_emergency_contacts",
         "safety_tips": get_safety_tips(risk_level),
         "safety_disclaimer": "This assistant supports safety planning but does not replace emergency services.",
         "reasons": reasons

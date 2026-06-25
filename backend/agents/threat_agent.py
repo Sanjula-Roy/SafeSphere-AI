@@ -1,15 +1,23 @@
 from utils.groq_helper import analyze_with_groq
+from mcp_server.server import call_mcp_tool
 
 
 def analyze_threat(message):
     groq_result = analyze_threat_with_groq(message)
 
+    mcp_result = call_mcp_tool(
+        "verify_scam_warning",
+        message=message
+    )
+
     if groq_result and "error" not in groq_result:
         groq_result["agent"] = "Threat Detection Agent"
         groq_result["analysis_source"] = "Groq LLM + Threat Agent"
+        groq_result["mcp_verification"] = mcp_result
+        groq_result["mcp_tool_used"] = "verify_scam_warning"
         return normalize_threat_score(groq_result)
 
-    return rule_based_threat_analysis(message)
+    return rule_based_threat_analysis(message, mcp_result)
 
 
 def analyze_threat_with_groq(message):
@@ -57,7 +65,7 @@ def normalize_threat_score(result):
     return result
 
 
-def rule_based_threat_analysis(message):
+def rule_based_threat_analysis(message, mcp_result=None):
     import re
 
     message_lower = message.lower()
@@ -86,6 +94,12 @@ def rule_based_threat_analysis(message):
     else:
         risk_level = "Low"
 
+    if mcp_result is None:
+        mcp_result = call_mcp_tool(
+            "verify_scam_warning",
+            message=message
+        )
+
     return {
         "agent": "Threat Detection Agent",
         "analysis_source": "Rule-based fallback",
@@ -105,5 +119,7 @@ def rule_based_threat_analysis(message):
             "Never share OTPs",
             "Check sender identity",
             "Avoid urgent payment or login links"
-        ]
+        ],
+        "mcp_verification": mcp_result,
+        "mcp_tool_used": "verify_scam_warning"
     }

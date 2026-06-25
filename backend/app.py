@@ -8,6 +8,7 @@ from agents.crisis_agent import assess_crisis
 from agents.planning_agent import generate_action_plan
 from agents.coordinator_agent import coordinate_safety_request
 from agents.emotional_support_agent import emotional_support_chat
+from mcp_server.server import call_mcp_tool
 
 app = Flask(__name__)
 CORS(app)
@@ -100,6 +101,21 @@ def emotional_chat_route():
         return jsonify({"error": "Message is required"}), 400
 
     return jsonify(emotional_support_chat(message))
+
+@app.route("/mcp-test", methods=["POST"])
+def mcp_test_route():
+    data = request.get_json()
+
+    tool_name = data.get("tool_name", "")
+    args = data.get("args", {})
+
+    result = call_mcp_tool(tool_name, **args)
+
+    return jsonify({
+        "mcp_server": "SafeSphere MCP Server",
+        "tool_called": tool_name,
+        "result": result
+    })
 
 if __name__ == "__main__":
     app.run(debug=True)

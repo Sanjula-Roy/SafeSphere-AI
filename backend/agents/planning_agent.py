@@ -1,13 +1,24 @@
 from utils.groq_helper import analyze_with_groq
-
+from mcp_server.server import call_mcp_tool
 
 def generate_action_plan(situation):
     groq_result = generate_plan_with_groq(situation)
 
     if groq_result and "error" not in groq_result:
-        groq_result["agent"] = "Action Planning Agent"
-        groq_result["analysis_source"] = "Groq LLM + Planning Agent"
-        return groq_result
+     groq_result["agent"] = "Action Planning Agent"
+     groq_result["analysis_source"] = "Groq LLM + Planning Agent"
+
+    crisis_type = groq_result.get("crisis_type", "general")
+
+    mcp_plan = call_mcp_tool(
+        "generate_disaster_plan",
+        disaster_type=crisis_type
+    )
+
+    groq_result["mcp_plan"] = mcp_plan
+    groq_result["mcp_tool_used"] = "generate_disaster_plan"
+
+    return groq_result
 
     return rule_based_action_plan(situation)
 
@@ -91,6 +102,11 @@ def rule_based_action_plan(situation):
         "analysis_source": "Rule-based fallback",
         "crisis_type": crisis_type,
         "immediate_plan": plan,
+"mcp_plan": call_mcp_tool(
+    "generate_disaster_plan",
+    disaster_type=crisis_type
+),
+"mcp_tool_used": "generate_disaster_plan",
         "next_30_minutes": [
             "Keep monitoring the situation",
             "Contact trusted people",

@@ -183,8 +183,42 @@ function buildPrompt(type) {
 }
 
 function listItems(value) {
-    if (!Array.isArray(value)) return "";
-    return value.map(item => `<li>${item}</li>`).join("");
+    if (!value) return "";
+
+    // Case 1: normal array
+    if (Array.isArray(value)) {
+        return value.map(item => {
+            if (typeof item === "object" && item !== null) {
+                if (item.name && item.number) {
+                    return `<li>${item.name} — ${item.number}</li>`;
+                }
+                return `<li>${JSON.stringify(item)}</li>`;
+            }
+
+            return `<li>${item}</li>`;
+        }).join("");
+    }
+
+    // Case 2: MCP emergency contacts object
+    if (value.contacts && Array.isArray(value.contacts)) {
+        return value.contacts
+            .map(contact => `<li>${contact.name} — ${contact.number}</li>`)
+            .join("");
+    }
+
+    // Case 3: MCP disaster plan object
+    if (value.plan && Array.isArray(value.plan)) {
+        return value.plan
+            .map(item => `<li>${item}</li>`)
+            .join("");
+    }
+
+    // Case 4: fallback for any object/string
+    if (typeof value === "object") {
+        return `<li>${JSON.stringify(value)}</li>`;
+    }
+
+    return `<li>${value}</li>`;
 }
 
 function safeText(value, fallback = "Not available.") {
@@ -231,6 +265,25 @@ function renderThreat(threat) {
             <h2>Warning Signs</h2>
             <ul>${listItems(threat.warning_signs)}</ul>
         </div>
+
+      
+       ${threat.mcp_verification ? `
+    <div class="card">
+        <h2>🔧 MCP Scam Verification</h2>
+
+        <h3>Matched Scam Indicators</h3>
+        <ul>
+            ${listItems(threat.mcp_verification.matched_warning_signs)}
+        </ul>
+
+        <h3>Tool Advice</h3>
+        <p>${safeText(threat.mcp_verification.tool_advice)}</p>
+
+        <h3>Tool Used</h3>
+        <p>${safeText(threat.mcp_verification.tool)}</p>
+    </div>
+` : ""}
+    </ul>
 
         <div class="card">
             <h2>Recommended Actions</h2>
