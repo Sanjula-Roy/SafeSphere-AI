@@ -106,7 +106,6 @@ function selectHelp(type) {
 
 function startVoiceInput() {
     const input = document.getElementById("userInput");
-
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
@@ -185,7 +184,6 @@ function buildPrompt(type) {
 function listItems(value) {
     if (!value) return "";
 
-    // Case 1: normal array
     if (Array.isArray(value)) {
         return value.map(item => {
             if (typeof item === "object" && item !== null) {
@@ -194,26 +192,22 @@ function listItems(value) {
                 }
                 return `<li>${JSON.stringify(item)}</li>`;
             }
-
             return `<li>${item}</li>`;
         }).join("");
     }
 
-    // Case 2: MCP emergency contacts object
     if (value.contacts && Array.isArray(value.contacts)) {
         return value.contacts
             .map(contact => `<li>${contact.name} — ${contact.number}</li>`)
             .join("");
     }
 
-    // Case 3: MCP disaster plan object
     if (value.plan && Array.isArray(value.plan)) {
         return value.plan
             .map(item => `<li>${item}</li>`)
             .join("");
     }
 
-    // Case 4: fallback for any object/string
     if (typeof value === "object") {
         return `<li>${JSON.stringify(value)}</li>`;
     }
@@ -231,6 +225,18 @@ function getRiskColor(risk) {
     return "#22c55e";
 }
 
+function getEmergencyNumber(type) {
+    if (!type) return "112";
+
+    const t = type.toLowerCase();
+
+    if (t.includes("medical")) return "108";
+    if (t.includes("fire")) return "101";
+    if (t.includes("scam") || t.includes("fraud")) return "1930";
+
+    return "112";
+}
+
 function renderRiskCard(risk, score) {
     return `
         <div class="card">
@@ -240,6 +246,57 @@ function renderRiskCard(risk, score) {
             </div>
         </div>
     `;
+}
+
+function renderEmergencyActionCenter(message, phoneNumber) {
+    if (!message) return "";
+
+    return `
+        <div class="card emergency-action-card">
+            <h2>🚨 Emergency Action Center</h2>
+
+            <p id="emergencyMessage">${message}</p>
+
+            <div class="button-row">
+                <button onclick="copyEmergencyMessage()">
+                    📋 Copy Message
+                </button>
+
+                <button onclick="shareEmergencyMessage()">
+                    📤 Share
+                </button>
+
+                ${phoneNumber ? `
+                    <a href="tel:${phoneNumber}">
+                        <button>
+                            📞 Call ${phoneNumber}
+                        </button>
+                    </a>
+                ` : ""}
+            </div>
+        </div>
+    `;
+}
+
+function copyEmergencyMessage() {
+    const text = document.getElementById("emergencyMessage")?.innerText || "";
+
+    navigator.clipboard.writeText(text)
+        .then(() => alert("Emergency message copied!"))
+        .catch(() => alert("Unable to copy message."));
+}
+
+async function shareEmergencyMessage() {
+    const text = document.getElementById("emergencyMessage")?.innerText || "";
+
+    if (navigator.share) {
+        await navigator.share({
+            title: "SafeSphere Emergency Message",
+            text: text
+        });
+    } else {
+        alert("Sharing is not supported in this browser.");
+    }
 }
 
 function renderThreat(threat) {
@@ -266,24 +323,20 @@ function renderThreat(threat) {
             <ul>${listItems(threat.warning_signs)}</ul>
         </div>
 
-      
-       ${threat.mcp_verification ? `
-    <div class="card">
-        <h2>🔧 MCP Scam Verification</h2>
+        ${threat.mcp_verification ? `
+            <div class="card">
+                <h2>🔧 MCP Scam Verification</h2>
 
-        <h3>Matched Scam Indicators</h3>
-        <ul>
-            ${listItems(threat.mcp_verification.matched_warning_signs)}
-        </ul>
+                <h3>Matched Scam Indicators</h3>
+                <ul>${listItems(threat.mcp_verification.matched_warning_signs)}</ul>
 
-        <h3>Tool Advice</h3>
-        <p>${safeText(threat.mcp_verification.tool_advice)}</p>
+                <h3>Tool Advice</h3>
+                <p>${safeText(threat.mcp_verification.tool_advice)}</p>
 
-        <h3>Tool Used</h3>
-        <p>${safeText(threat.mcp_verification.tool)}</p>
-    </div>
-` : ""}
-    </ul>
+                <h3>Tool Used</h3>
+                <p>${safeText(threat.mcp_verification.tool)}</p>
+            </div>
+        ` : ""}
 
         <div class="card">
             <h2>Recommended Actions</h2>
@@ -294,6 +347,8 @@ function renderThreat(threat) {
             <h2>Safe Reply</h2>
             <p>${safeText(threat.safe_reply)}</p>
         </div>
+
+        ${renderEmergencyActionCenter(threat.safe_reply, "1930")}
 
         <div class="card">
             <h2>Security Tips</h2>
@@ -326,10 +381,7 @@ function renderPersonalSafety(safety) {
             <ul>${listItems(safety.next_30_minutes)}</ul>
         </div>
 
-        <div class="card">
-            <h2>SOS Message</h2>
-            <p>${safeText(safety.custom_sos_message)}</p>
-        </div>
+        ${renderEmergencyActionCenter(safety.custom_sos_message, "112")}
 
         <div class="card">
             <h2>Emergency Contacts</h2>
@@ -418,17 +470,42 @@ function renderCrisis(crisis, plan) {
                 <h2>Family Safety Message</h2>
                 <p>${safeText(plan.safe_message)}</p>
             </div>
+
+            ${renderEmergencyActionCenter(plan.safe_message, getEmergencyNumber(plan.crisis_type))}
+
             ${plan.mcp_plan ? `
-    <div class="card">
-        <h2>🔧 MCP ${plan.crisis_type} Response Plan</h2>
-        <ul>${listItems(plan.mcp_plan)}</ul>
-    </div>
-` : ""}
+                <div class="card">
+                    <h2>🔧 MCP ${plan.crisis_type} Response Plan</h2>
+                    <ul>${listItems(plan.mcp_plan)}</ul>
+                </div>
+            ` : ""}
+
+            ${plan.nearby_resources ? `
+                <div class="card">
+                    <h2>📍 Nearby Resources</h2>
+
+                    <p>${safeText(plan.nearby_resources.note)}</p>
+
+                    <ul>
+                        ${(plan.nearby_resources.resources || []).map(resource => `
+                            <li>
+                                <strong>${resource.name}</strong><br>
+                                Type: ${resource.type}<br>
+                                Distance: ${resource.distance}<br>
+                                ${resource.available}
+                            </li>
+                        `).join("")}
+                    </ul>
+
+                    <p><strong>MCP Tool:</strong> ${safeText(plan.resource_tool_used)}</p>
+                </div>
+            ` : ""}
         `;
     }
 
     return html;
 }
+
 function renderEmotionalSupport(support) {
     return `
         <div class="card emotional-card">
@@ -496,6 +573,7 @@ async function sendEmotionalMessage() {
         typingMsg.innerText = "I'm here with you. You can tell me more.";
     }
 }
+
 async function analyzeSafety() {
     const input = document.getElementById("userInput").value;
     const resultDiv = document.getElementById("result");
@@ -519,8 +597,9 @@ async function analyzeSafety() {
 
         const final = data.final_response || {};
         let html = "";
+
         if (final.emotional_support) {
-        html += renderEmotionalSupport(final.emotional_support);
+            html += renderEmotionalSupport(final.emotional_support);
         }
 
         if (final.threat_analysis) {

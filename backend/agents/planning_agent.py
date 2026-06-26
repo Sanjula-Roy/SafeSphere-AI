@@ -18,6 +18,15 @@ def generate_action_plan(situation):
     groq_result["mcp_plan"] = mcp_plan
     groq_result["mcp_tool_used"] = "generate_disaster_plan"
 
+    nearby_resources = call_mcp_tool(
+    "find_nearby_resources",
+    location="demo area",
+    emergency_type=crisis_type
+)
+
+    groq_result["nearby_resources"] = nearby_resources
+    groq_result["resource_tool_used"] = "find_nearby_resources"
+
     return groq_result
 
     return rule_based_action_plan(situation)
