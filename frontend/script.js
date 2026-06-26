@@ -418,6 +418,12 @@ function renderCrisis(crisis, plan) {
                 <h2>Family Safety Message</h2>
                 <p>${safeText(plan.safe_message)}</p>
             </div>
+            ${plan.mcp_plan ? `
+    <div class="card">
+        <h2>🔧 MCP ${plan.crisis_type} Response Plan</h2>
+        <ul>${listItems(plan.mcp_plan)}</ul>
+    </div>
+` : ""}
         `;
     }
 
