@@ -713,16 +713,28 @@ async function analyzeSafety() {
         }
 
         html += `
-            <div class="card">
-                <h2>Agents Used</h2>
-                <ul>${listItems(data.selected_agents)}</ul>
-            </div>
+<div class="card">
 
-            <div class="card">
-                <h2>Summary</h2>
-                <p>${safeText(data.explanation?.short_summary || data.summary)}</p>
-            </div>
-        `;
+<h2>🤖 AI Agents Used</h2>
+
+<div class="agent-container">
+
+${(data.selected_agents || []).map(agent=>`
+
+<div class="agent-chip">
+
+<span>🤖</span>
+
+${agent}
+
+</div>
+
+`).join("")}
+
+</div>
+
+</div>
+`;
 
         resultDiv.innerHTML = html;
 
