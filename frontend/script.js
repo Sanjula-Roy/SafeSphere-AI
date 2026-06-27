@@ -236,18 +236,45 @@ function getEmergencyNumber(type) {
 
     return "112";
 }
-
 function renderRiskCard(risk, score) {
+    const safeScore = score !== undefined ? Number(score) : 0;
+    const riskText = risk || "Unknown";
+
+    let subtitle = "Stay aware and follow safety guidance.";
+    if (riskText === "High") subtitle = "Immediate action may be required.";
+    if (riskText === "Medium") subtitle = "Be cautious and take preventive steps.";
+    if (riskText === "Low") subtitle = "Situation appears relatively low risk.";
+
+    const angle = -90 + (safeScore * 1.8);
+
     return `
-        <div class="card">
-            <h2>Risk Assessment</h2>
-            <div class="risk" style="background:${getRiskColor(risk)}">
-                ${risk || "Unknown"} ${score !== undefined ? `(${score}/100)` : ""}
+        <div class="card risk-card">
+            <h2>🛡 Risk Meter</h2>
+
+            <div class="gauge">
+                <div class="gauge-arc">
+                    <div class="gauge-label very-low">Very Low</div>
+                    <div class="gauge-label low">Low</div>
+                    <div class="gauge-label medium">Med</div>
+                    <div class="gauge-label high">High</div>
+                    <div class="gauge-label critical">Critical</div>
+
+                    <div class="needle" style="transform: rotate(${angle}deg);"></div>
+                    <div class="needle-center"></div>
+                </div>
             </div>
+
+            <div class="risk-bottom">
+                <span class="risk-badge" style="background:${getRiskColor(riskText)}">
+                    ${riskText}
+                </span>
+                <span class="risk-score-text">${safeScore}/100</span>
+            </div>
+
+            <p class="risk-subtitle">${subtitle}</p>
         </div>
     `;
 }
-
 function renderEmergencyActionCenter(message, phoneNumber) {
     if (!message) return "";
 

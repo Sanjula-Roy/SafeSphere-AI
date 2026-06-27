@@ -58,19 +58,11 @@ button:hover {
     border-radius: 12px;
     white-space: pre-wrap;
 }
-.card {
-
-    background: #111827;
-
-    margin-top: 20px;
-
-    padding: 20px;
-
-    border-radius: 15px;
-
-    border: 1px solid #334155;
+.card{
+    padding:20px;
+    margin:18px 0;
+    border-radius:18px;
 }
-
 .card h2 {
 
     margin-top: 0;
@@ -251,4 +243,163 @@ button:hover {
 
 .emergency-action-card {
     border: 1px solid #ef4444;
+}
+
+.risk-header{
+    margin:15px 0;
+}
+
+.risk-fill {
+    height: 100%;
+    border-radius: 999px;
+    transition: width 0.8s ease;
+}
+.risk-card {
+    text-align: center;
+    padding: 26px;
+}
+
+.gauge {
+    width: 300px;
+    max-width: 100%;
+    height: 165px;
+    margin: 20px auto 5px;
+    position: relative;
+}
+
+.gauge-arc {
+    width: 300px;
+    height: 150px;
+    max-width: 100%;
+    position: relative;
+    overflow: hidden;
+    margin: auto;
+}
+
+.gauge-arc::before {
+    content: "";
+    position: absolute;
+    width: 270px;
+    height: 270px;
+    left: 50%;
+    top: 25px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background:
+        conic-gradient(
+            from 270deg,
+            #22c55e 0deg 36deg,
+            #84cc16 36deg 72deg,
+            #facc15 72deg 108deg,
+            #f97316 108deg 144deg,
+            #ef4444 144deg 180deg,
+            transparent 180deg 360deg
+        );
+}
+
+.gauge-arc::after {
+    content: "";
+    position: absolute;
+    width: 180px;
+    height: 180px;
+    left: 50%;
+    top: 65px;
+    transform: translateX(-50%);
+    border-radius: 50%;
+    background: #111827;
+}
+
+.needle {
+    position: absolute;
+    width: 5px;
+    height: 92px;
+    background: #f8fafc;
+    left: 50%;
+    top: 74px;
+    transform-origin: bottom center;
+    border-radius: 999px;
+    z-index: 5;
+    transition: transform 0.8s ease;
+}
+
+.needle-center {
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    background: #f8fafc;
+    border: 6px solid #1f2937;
+    border-radius: 50%;
+    left: 50%;
+    top: 148px;
+    transform: translate(-50%, -50%);
+    z-index: 6;
+}
+
+.gauge-label{
+    position:absolute;
+    z-index:10;
+    font-size:11px;
+    font-weight:700;
+    color:#ffffff;
+    text-transform:uppercase;
+    transform:translate(-50%, -50%);
+    white-space:nowrap;
+}
+
+/* Green */
+.gauge-label.very-low{
+    left:28px;
+    top:108px;
+}
+
+/* Light Green */
+.gauge-label.low{
+    left:82px;
+    top:48px;
+}
+
+/* Yellow */
+.gauge-label.medium{
+    left:150px;
+    top:18px;
+}
+
+/* Orange */
+.gauge-label.high{
+    left:218px;
+    top:48px;
+}
+
+/* Red */
+.gauge-label.critical{
+    left:272px;
+    top:108px;
+}
+
+.risk-bottom {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 18px;
+    margin-top: 5px;
+}
+
+.risk-badge {
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 25px;
+    text-transform: uppercase;
+}
+
+.risk-score-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: #f8fafc;
+}
+
+.risk-subtitle {
+    margin-top: 6px;
+    font-size:14px;
+    color: #cbd5e1;
 }
