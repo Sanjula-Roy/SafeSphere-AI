@@ -100,29 +100,127 @@ def generate_disaster_plan(disaster_type):
 
 
 def find_nearby_resources(location="demo area", emergency_type="general"):
-    return {
-        "tool": "Nearby Resource Finder Tool",
-        "note": "Demo resource finder using sample data.",
-        "location": location,
-        "emergency_type": emergency_type,
-        "resources": [
+    resource_map = {
+        "medical": [
             {
-                "name": "Nearest Government Hospital",
+                "name": "Emergency Hospital",
                 "type": "hospital",
-                "distance": "2.1 km",
-                "available": "Emergency care available"
+                "available": "Emergency and ambulance support"
+            },
+            {
+                "name": "Nearest Ambulance Service",
+                "type": "ambulance",
+                "available": "Medical transport support"
+            },
+            {
+                "name": "24/7 Pharmacy",
+                "type": "pharmacy",
+                "available": "Medicines and urgent supplies"
+            }
+        ],
+        "fire": [
+            {
+                "name": "Nearest Fire Station",
+                "type": "fire station",
+                "available": "Fire rescue support"
+            },
+            {
+                "name": "Emergency Hospital",
+                "type": "hospital",
+                "available": "Burn/injury treatment support"
+            },
+            {
+                "name": "Safe Open Area",
+                "type": "safe open area",
+                "available": "Temporary safe gathering point"
+            }
+        ],
+        "flood": [
+            {
+                "name": "Relief Shelter",
+                "type": "relief shelter",
+                "available": "Temporary shelter and basic supplies"
+            },
+            {
+                "name": "Disaster Response Center",
+                "type": "disaster response center",
+                "available": "Flood support and rescue coordination"
+            },
+            {
+                "name": "Emergency Hospital",
+                "type": "hospital",
+                "available": "Medical emergency support"
+            }
+        ],
+        "earthquake": [
+            {
+                "name": "Safe Open Ground",
+                "type": "safe open ground",
+                "available": "Open area away from buildings"
+            },
+            {
+                "name": "Emergency Hospital",
+                "type": "hospital",
+                "available": "Injury treatment support"
+            },
+            {
+                "name": "Disaster Response Center",
+                "type": "disaster response center",
+                "available": "Rescue coordination"
+            }
+        ],
+        "women": [
+            {
+                "name": "Nearest Police Station",
+                "type": "police station",
+                "available": "Immediate safety support"
+            },
+            {
+                "name": "Women Help Desk",
+                "type": "women help desk",
+                "available": "Women safety assistance"
+            },
+            {
+                "name": "Crowded Public Place",
+                "type": "public place",
+                "available": "Move here if you feel unsafe"
+            }
+        ],
+        "scam": [
+            {
+                "name": "Cyber Crime Help",
+                "type": "cyber crime police station",
+                "available": "Report online fraud or scam"
             },
             {
                 "name": "Nearest Police Station",
-                "type": "police",
-                "distance": "1.4 km",
+                "type": "police station",
+                "available": "File complaint if needed"
+            }
+        ],
+        "general": [
+            {
+                "name": "Nearest Police Station",
+                "type": "police station",
                 "available": "24/7 support"
             },
             {
-                "name": "Community Relief Center",
-                "type": "shelter",
-                "distance": "3.0 km",
-                "available": "Temporary shelter support"
+                "name": "Emergency Hospital",
+                "type": "hospital",
+                "available": "Emergency medical support"
             }
         ]
+    }
+
+    selected_resources = resource_map.get(
+        emergency_type.lower(),
+        resource_map["general"]
+    )
+
+    return {
+        "tool": "Nearby Resource Finder Tool",
+        "note": "Demo resource finder using Google Maps search links.",
+        "location": location,
+        "emergency_type": emergency_type,
+        "resources": selected_resources
     }

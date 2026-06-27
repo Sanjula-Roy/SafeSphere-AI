@@ -10,14 +10,25 @@ def analyze_threat(message):
         message=message
     )
 
+    nearby_resources = call_mcp_tool(
+        "find_nearby_resources",
+        location="demo area",
+        emergency_type="scam"
+    )
+
     if groq_result and "error" not in groq_result:
         groq_result["agent"] = "Threat Detection Agent"
         groq_result["analysis_source"] = "Groq LLM + Threat Agent"
+
         groq_result["mcp_verification"] = mcp_result
         groq_result["mcp_tool_used"] = "verify_scam_warning"
+
+        groq_result["nearby_resources"] = nearby_resources
+        groq_result["resource_tool_used"] = "find_nearby_resources"
+
         return normalize_threat_score(groq_result)
 
-    return rule_based_threat_analysis(message, mcp_result)
+    return rule_based_threat_analysis(message, mcp_result, nearby_resources)
 
 
 def analyze_threat_with_groq(message):
@@ -65,7 +76,7 @@ def normalize_threat_score(result):
     return result
 
 
-def rule_based_threat_analysis(message, mcp_result=None):
+def rule_based_threat_analysis(message, mcp_result=None, nearby_resources=None):
     import re
 
     message_lower = message.lower()
@@ -100,6 +111,13 @@ def rule_based_threat_analysis(message, mcp_result=None):
             message=message
         )
 
+    if nearby_resources is None:
+        nearby_resources = call_mcp_tool(
+            "find_nearby_resources",
+            location="demo area",
+            emergency_type="scam"
+        )
+
     return {
         "agent": "Threat Detection Agent",
         "analysis_source": "Rule-based fallback",
@@ -121,5 +139,7 @@ def rule_based_threat_analysis(message, mcp_result=None):
             "Avoid urgent payment or login links"
         ],
         "mcp_verification": mcp_result,
-        "mcp_tool_used": "verify_scam_warning"
+        "mcp_tool_used": "verify_scam_warning",
+        "nearby_resources": nearby_resources,
+        "resource_tool_used": "find_nearby_resources"
     }

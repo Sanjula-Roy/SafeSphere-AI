@@ -299,6 +299,34 @@ async function shareEmergencyMessage() {
     }
 }
 
+function renderNearbyResources(nearbyResources, toolName) {
+    if (!nearbyResources) return "";
+
+    return `
+        <div class="card">
+            <h2>📍 Nearby Resources</h2>
+
+            <p>${safeText(nearbyResources.note)}</p>
+
+            <ul>
+                ${(nearbyResources.resources || []).map(resource => `
+                    <li>
+                        <strong>${resource.name}</strong><br>
+                        ${resource.available}<br>
+                        <a
+                            href="https://www.google.com/maps/search/${encodeURIComponent(resource.type + " near me")}"
+                            target="_blank"
+                        >
+                            <button>🗺️ Open ${resource.type} in Maps</button>
+                        </a>
+                    </li>
+                `).join("")}
+            </ul>
+
+            <p><strong>MCP Tool:</strong> ${safeText(toolName)}</p>
+        </div>
+    `;
+}
 function renderThreat(threat) {
     return `
         ${renderRiskCard(threat.risk_level, threat.risk_score)}
@@ -349,7 +377,10 @@ function renderThreat(threat) {
         </div>
 
         ${renderEmergencyActionCenter(threat.safe_reply, "1930")}
-
+        ${renderNearbyResources(
+    threat.nearby_resources,
+    threat.resource_tool_used
+)}
         <div class="card">
             <h2>Security Tips</h2>
             <ul>${listItems(threat.security_tips)}</ul>
@@ -387,7 +418,10 @@ function renderPersonalSafety(safety) {
             <h2>Emergency Contacts</h2>
             <ul>${listItems(safety.emergency_contacts)}</ul>
         </div>
-
+       ${renderNearbyResources(
+    safety.nearby_resources,
+    safety.resource_tool_used
+)}
         <div class="card">
             <h2>Safety Tips</h2>
             <ul>${listItems(safety.safety_tips)}</ul>
@@ -488,12 +522,17 @@ function renderCrisis(crisis, plan) {
 
                     <ul>
                         ${(plan.nearby_resources.resources || []).map(resource => `
-                            <li>
-                                <strong>${resource.name}</strong><br>
-                                Type: ${resource.type}<br>
-                                Distance: ${resource.distance}<br>
-                                ${resource.available}
-                            </li>
+                           <li>
+    <strong>${resource.name}</strong><br>
+    Type: ${resource.type}<br>
+    ${resource.available}<br>
+    <a 
+        href="https://www.google.com/maps/search/${encodeURIComponent(resource.type + ' near me')}" 
+        target="_blank"
+    >
+        <button>🗺️ Open ${resource.type} in Maps</button>
+    </a>
+</li>
                         `).join("")}
                     </ul>
 

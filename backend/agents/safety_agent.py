@@ -21,6 +21,13 @@ def assess_personal_safety(situation):
         )
         groq_result["mcp_tool_used"] = "get_emergency_contacts"
 
+        groq_result["nearby_resources"] = call_mcp_tool(
+            "find_nearby_resources",
+            location="demo area",
+            emergency_type="women"
+        )
+        groq_result["resource_tool_used"] = "find_nearby_resources"
+
         risk_level = groq_result.get("risk_level", "Low")
 
         if risk_level == "High" and groq_result.get("risk_score", 0) < 70:
@@ -156,6 +163,12 @@ def rule_based_personal_safety(situation):
             category="women"
         ),
         "mcp_tool_used": "get_emergency_contacts",
+        "nearby_resources": call_mcp_tool(
+            "find_nearby_resources",
+            location="demo area",
+            emergency_type="women"
+        ),
+        "resource_tool_used": "find_nearby_resources",
         "safety_tips": get_safety_tips(risk_level),
         "safety_disclaimer": "This assistant supports safety planning but does not replace emergency services.",
         "reasons": reasons
