@@ -26,12 +26,23 @@
     </div>
 
     <div class="input-row">
-    <textarea 
-        id="userInput" 
-        placeholder="Your guided situation will appear here. You can also type extra details..."
+    <div class="input-container">
+
+
+    <textarea
+        id="userInput"
+        placeholder="Describe your situation..."
     ></textarea>
 
-    <button class="mic-btn" onclick="startVoiceInput()">🎙️</button>
+    <button
+        class="voice-btn"
+        onclick="startVoiceInput()">
+
+        🎤
+
+    </button>
+
+</div>
     </div>
 
     <button class="analyze-btn" onclick="analyzeSafety()">Analyze Safety</button>

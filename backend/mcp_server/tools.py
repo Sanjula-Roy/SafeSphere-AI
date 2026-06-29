@@ -219,7 +219,7 @@ def find_nearby_resources(location="demo area", emergency_type="general"):
 
     return {
         "tool": "Nearby Resource Finder Tool",
-        "note": "Demo resource finder using Google Maps search links.",
+        "note": "Tap any resource below to open directions in Google Maps.",
         "location": location,
         "emergency_type": emergency_type,
         "resources": selected_resources

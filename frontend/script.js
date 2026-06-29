@@ -122,6 +122,9 @@ function startVoiceInput() {
 
     recognition.onstart = function () {
         input.placeholder = "Listening...";
+        document
+.querySelector(".voice-btn")
+.classList.add("listening");
     };
 
     recognition.onresult = function (event) {
@@ -129,11 +132,26 @@ function startVoiceInput() {
         input.value = input.value + " " + speechText;
         input.placeholder = "Your guided situation will appear here. You can also type extra details...";
     };
+     recognition.onend = function () {
+
+    document
+        .querySelector(".voice-btn")
+        .classList.remove("listening");
+
+};
+
 
     recognition.onerror = function () {
-        alert("Voice input failed. Please try again.");
-        input.placeholder = "Your guided situation will appear here. You can also type extra details...";
-    };
+
+    document
+        .querySelector(".voice-btn")
+        .classList.remove("listening");
+
+    alert("Voice input failed. Please try again.");
+
+    input.placeholder =
+        "Your guided situation will appear here. You can also type extra details...";
+};
 }
 
 function buildPrompt(type) {
@@ -327,31 +345,63 @@ async function shareEmergencyMessage() {
 }
 
 function renderNearbyResources(nearbyResources, toolName) {
+
     if (!nearbyResources) return "";
 
+    const iconMap = {
+        hospital: "🏥",
+        police: "👮",
+        fire: "🚒",
+        shelter: "🏠",
+        women: "👩",
+        ambulance: "🚑"
+    };
+
     return `
-        <div class="card">
-            <h2>📍 Nearby Resources</h2>
+    <div class="card">
 
-            <p>${safeText(nearbyResources.note)}</p>
+        <h2>📍 Nearby Resources</h2>
 
-            <ul>
-                ${(nearbyResources.resources || []).map(resource => `
-                    <li>
-                        <strong>${resource.name}</strong><br>
-                        ${resource.available}<br>
-                        <a
-                            href="https://www.google.com/maps/search/${encodeURIComponent(resource.type + " near me")}"
-                            target="_blank"
-                        >
-                            <button>🗺️ Open ${resource.type} in Maps</button>
-                        </a>
-                    </li>
-                `).join("")}
-            </ul>
+        <div class="resource-note">
+    📍 ${safeText(nearbyResources.note)}
+</div>
 
-            <p><strong>MCP Tool:</strong> ${safeText(toolName)}</p>
+        <div class="resource-grid">
+
+        ${(nearbyResources.resources || []).map(resource => `
+
+            <div class="resource-card">
+
+                <div class="resource-icon">
+                    ${iconMap[resource.type] || "📍"}
+                </div>
+
+                <div class="resource-content">
+
+                    <h3>${resource.name}</h3>
+
+                    <p>${resource.available}</p>
+
+                    <a
+                        href="https://www.google.com/maps/search/${encodeURIComponent(resource.type + " near me")}"
+                        target="_blank"
+                    >
+                        🗺 Open in Google Maps
+                    </a>
+
+                </div>
+
+            </div>
+
+        `).join("")}
+
         </div>
+
+        <div class="tool-used">
+            MCP Tool : ${safeText(toolName)}
+        </div>
+
+    </div>
     `;
 }
 function renderThreat(threat) {
@@ -505,70 +555,14 @@ function renderCrisis(crisis, plan) {
         `;
     }
 
-    if (plan) {
-        html += `
-            <div class="card">
-                <h2>Immediate Action Plan</h2>
-                <ul>${listItems(plan.immediate_plan)}</ul>
-            </div>
+   if (plan.nearby_resources) {
 
-            <div class="card">
-                <h2>Next 30 Minutes</h2>
-                <ul>${listItems(plan.next_30_minutes)}</ul>
-            </div>
+    html += renderNearbyResources(
+        plan.nearby_resources,
+        plan.resource_tool_used
+    );
 
-            <div class="card">
-                <h2>Emergency Kit</h2>
-                <ul>${listItems(plan.emergency_kit)}</ul>
-            </div>
-
-            <div class="card">
-                <h2>Avoid</h2>
-                <ul>${listItems(plan.avoid)}</ul>
-            </div>
-
-            <div class="card">
-                <h2>Family Safety Message</h2>
-                <p>${safeText(plan.safe_message)}</p>
-            </div>
-
-            ${renderEmergencyActionCenter(plan.safe_message, getEmergencyNumber(plan.crisis_type))}
-
-            ${plan.mcp_plan ? `
-                <div class="card">
-                    <h2>🔧 MCP ${plan.crisis_type} Response Plan</h2>
-                    <ul>${listItems(plan.mcp_plan)}</ul>
-                </div>
-            ` : ""}
-
-            ${plan.nearby_resources ? `
-                <div class="card">
-                    <h2>📍 Nearby Resources</h2>
-
-                    <p>${safeText(plan.nearby_resources.note)}</p>
-
-                    <ul>
-                        ${(plan.nearby_resources.resources || []).map(resource => `
-                           <li>
-    <strong>${resource.name}</strong><br>
-    Type: ${resource.type}<br>
-    ${resource.available}<br>
-    <a 
-        href="https://www.google.com/maps/search/${encodeURIComponent(resource.type + ' near me')}" 
-        target="_blank"
-    >
-        <button>🗺️ Open ${resource.type} in Maps</button>
-    </a>
-</li>
-                        `).join("")}
-                    </ul>
-
-                    <p><strong>MCP Tool:</strong> ${safeText(plan.resource_tool_used)}</p>
-                </div>
-            ` : ""}
-        `;
-    }
-
+}
     return html;
 }
 
