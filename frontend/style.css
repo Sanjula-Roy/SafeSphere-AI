@@ -931,3 +931,346 @@ animation:fadeUp .5s ease both;
     box-shadow:0 0 18px rgba(124,58,237,.25);
 
 }
+.help-card{
+
+    position:relative;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+
+    width:100%;
+    height:180px;
+
+    padding:24px 28px;
+
+    border-radius:24px;
+
+    overflow:hidden;
+
+    cursor:pointer;
+
+    background:rgba(255,255,255,.04);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    backdrop-filter:blur(18px);
+
+    transition:.35s ease;
+
+}
+.card-top{
+
+display:flex;
+
+align-items:center;
+
+justify-content:space-between;
+
+width:100%;
+
+gap:14px;
+
+}
+.icon-box{
+
+width:45px;
+
+height:45px;
+
+font-size:28px;
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+border-radius:20px;
+
+color:white;
+
+flex-shrink:0;
+
+box-shadow:
+0 0 25px rgba(255,255,255,.15),
+0 0 50px rgba(120,100,255,.25);
+
+}
+.card-text{
+
+flex:1;
+text-align:left;
+
+}
+.card-text h3{
+
+margin:0;
+
+font-size:20px;
+
+line-height:1.25;
+
+margin-bottom:8px;
+
+font-weight:700;
+
+color:white;
+
+}
+.card-text p{
+
+    font-size:14px;
+
+    font-weight:500;
+
+    line-height:1.5;
+
+    color:#b7bfd5;
+
+}
+.arrow{
+
+margin-left:auto;
+
+width:30px;
+
+height:30px;
+
+border-radius:50%;
+
+display:flex;
+
+justify-content:center;
+
+align-items:center;
+
+background:rgba(255,255,255,.06);
+
+border:1px solid rgba(255,255,255,.1);
+
+}
+.help-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:
+        0 20px 40px rgba(0,0,0,.45),
+        0 0 35px rgba(120,90,255,.25);
+
+}
+
+.help-card:hover .arrow{
+
+transform:translateX(8px);
+
+background:white;
+
+color:#6c3df5;
+
+}
+
+.scam .icon-box{
+
+background:rgba(255,80,160,.18);
+
+color:#ff5da8;
+
+}
+.women{
+
+border:1px solid rgba(150,90,255,.35);
+
+}
+
+.women .icon-box{
+
+background:rgba(150,90,255,.18);
+
+color:#b16cff;
+
+}
+.medical{
+
+border:1px solid rgba(40,140,255,.35);
+
+}
+
+.medical .icon-box{
+
+background:rgba(40,140,255,.18);
+
+color:#5ab2ff;
+
+}
+.disaster{
+
+border:1px solid rgba(0,255,210,.35);
+
+}
+
+.disaster .icon-box{
+
+background:rgba(0,255,210,.18);
+
+color:#31ffe4;
+
+}
+.privacy{
+
+border:1px solid rgba(255,185,60,.35);
+
+}
+
+.privacy .icon-box{
+
+background:rgba(255,185,60,.18);
+
+color:#ffc44d;
+
+}
+.sos{
+
+border:1px solid rgba(255,80,80,.35);
+
+}
+
+.sos .icon-box{
+
+background:rgba(255,80,80,.18);
+
+color:#ff6b6b;
+
+}
+.scam{
+
+    background:
+        radial-gradient(circle at top right,
+        rgba(255,120,180,.10),
+        transparent 45%),
+        linear-gradient(135deg,#552142,#2a1f35);
+
+}
+
+.scam .icon-box{
+
+background:
+linear-gradient(135deg,#ff6aa8,#b93bff);
+
+}
+.women{
+
+background:
+linear-gradient(135deg,#33214d,#261d38);
+
+border:1px solid rgba(167,90,255,.4);
+
+}
+
+.women .icon-box{
+
+background:
+linear-gradient(135deg,#8d5cff,#cf69ff);
+
+}
+.medical{
+
+background:
+linear-gradient(135deg,#1f355a,#16263f);
+
+border:1px solid rgba(70,170,255,.4);
+
+}
+
+.medical .icon-box{
+
+background:
+linear-gradient(135deg,#34b8ff,#357dff);
+
+}
+.disaster{
+
+background:
+linear-gradient(135deg,#103d47,#16343a);
+
+border:1px solid rgba(39,255,220,.4);
+
+}
+
+.disaster .icon-box{
+
+background:
+linear-gradient(135deg,#22f0ff,#00b7ff);
+
+}
+.privacy{
+
+background:
+linear-gradient(135deg,#433321,#30251d);
+
+border:1px solid rgba(255,204,80,.45);
+
+}
+
+.privacy .icon-box{
+
+background:
+linear-gradient(135deg,#ffd54a,#ff8d28);
+
+}
+.sos{
+
+background:
+linear-gradient(135deg,#4b2433,#311d2d);
+
+border:1px solid rgba(255,100,100,.45);
+
+}
+
+.sos .icon-box{
+
+background:
+linear-gradient(135deg,#ff7373,#ff4466);
+
+}
+.help-card::before{
+
+content:"";
+
+position:absolute;
+
+top:-80px;
+
+right:-80px;
+
+width:170px;
+
+height:170px;
+
+border-radius:50%;
+
+background:rgba(255,255,255,.08);
+
+filter:blur(45px);
+
+}
+.help-card::after{
+
+content:"";
+
+position:absolute;
+
+top:-80px;
+
+right:-80px;
+
+width:180px;
+
+height:180px;
+
+background:radial-gradient(circle,
+rgba(255,255,255,.10),
+transparent 70%);
+
+pointer-events:none;
+
+}

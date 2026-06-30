@@ -6,21 +6,181 @@
 </head>
 <body>
 
+<div class="page">
+
 <div class="container">
-    <h1>🛡️ SafeSphere AI</h1>
-    <p class="subtitle">AI Safety Response Platform</p>
+    <div class="hero">
 
-    <h2>Select Help Type</h2>
+<div class="logo">
 
-    <div class="help-grid">
-        <button onclick="selectHelp('scam')">🚨 Scam / Fraud</button>
-        <button onclick="selectHelp('women')">👩 Women Safety</button>
-        <button onclick="selectHelp('medical')">🏥 Medical</button>
-        <button onclick="selectHelp('disaster')">🌊 Disaster</button>
-        <button onclick="selectHelp('privacy')">🔒 Privacy Leak</button>
-        <button onclick="selectHelp('sos')">🆘 SOS Message</button>
-    </div>
+🛡️
 
+</div>
+
+<h1>
+
+How can we
+
+<span>help you today?</span>
+
+</h1>
+
+<p>
+
+Select a category to get started
+
+</p>
+
+</div>
+
+   <div class="help-grid">
+
+    <button class="help-card scam" onclick="selectHelp('scam')">
+
+        <div class="card-top">
+
+            <div class="icon-box">🚨</div>
+
+            <div class="card-text">
+
+                <h3>Scam / Fraud</h3>
+
+                <p>
+                    
+Report scams, fraud<br>
+& phishing attacks
+</p>
+                
+
+            </div>
+
+            <div class="arrow">➜</div>
+
+        </div>
+
+    </button>
+
+
+    <button class="help-card women" onclick="selectHelp('women')">
+
+        <div class="card-top">
+
+            <div class="icon-box">👩</div>
+
+            <div class="card-text">
+
+                <h3>Women Safety</h3>
+
+                <p>
+                    Personal safety,<br>
+                    harassment & protection
+                </p>
+
+            </div>
+
+            <div class="arrow">➜</div>
+
+        </div>
+
+    </button>
+
+
+    <button class="help-card medical" onclick="selectHelp('medical')">
+
+        <div class="card-top">
+
+            <div class="icon-box">🏥</div>
+
+            <div class="card-text">
+
+                <h3>Medical</h3>
+
+                <p>
+                    Medical emergencies<br>
+                    & health assistance
+                </p>
+
+            </div>
+
+            <div class="arrow">➜</div>
+
+        </div>
+
+    </button>
+
+
+    <button class="help-card disaster" onclick="selectHelp('disaster')">
+
+        <div class="card-top">
+
+            <div class="icon-box">🌊</div>
+
+            <div class="card-text">
+
+                <h3>Disaster</h3>
+
+                <p>
+                    Floods, fires,<br>
+                    earthquakes & storms
+                </p>
+
+            </div>
+
+            <div class="arrow">➜</div>
+
+        </div>
+
+    </button>
+
+
+    <button class="help-card privacy" onclick="selectHelp('privacy')">
+
+        <div class="card-top">
+
+            <div class="icon-box">🔒</div>
+
+            <div class="card-text">
+
+                <h3>Privacy Leak</h3>
+
+                <p>
+                    Protect personal data & sensitive<br>
+                     information
+                </p>
+
+            </div>
+
+            <div class="arrow">➜</div>
+
+        </div>
+
+    </button>
+
+
+    <button class="help-card sos" onclick="selectHelp('sos')">
+
+        <div class="card-top">
+
+            <div class="icon-box">🆘</div>
+
+            <div class="card-text">
+
+                <h3>SOS Message</h3>
+
+                <p>
+                    Send emergency alerts to trusted<br>
+                    contacts
+                </p>
+
+            </div>
+
+            <div class="arrow">➜</div>
+
+        </div>
+
+    </button>
+
+</div>
     <div id="questionsBox" class="questions-box">
         <p>Select a help type above to get guided questions.</p>
     </div>
@@ -48,6 +208,8 @@
     <button class="analyze-btn" onclick="analyzeSafety()">Analyze Safety</button>
 
     <div id="result"></div>
+</div>
+
 </div>
 
 <script src="script.js"></script>
